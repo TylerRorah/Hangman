@@ -13,11 +13,20 @@ import random
 with open("wordlist.json", "r") as file:
     word_list = json.load(file)
 
+chosen_letters = []
 word = random.choice(word_list)
 word_length = len(word)
 body_parts = 5
 display = ['*'] * word_length
 
+def check_for_same_guess(guess):
+    if guess in chosen_letters:
+        print("You've already choosen this letter.")
+        new_guess = get_guess()
+    else:
+        chosen_letters.append(guess)
+        return True
+            
 def get_user_input(prompt):
     # get user input
     return input(prompt)
@@ -68,6 +77,7 @@ def main():
     global display
     while True:
         guess = get_guess()
+        check_for_same_guess(guess)
         is_correct(guess)
         print_result(is_correct(guess))
         update_body_parts(is_correct(guess))
@@ -78,3 +88,20 @@ def main():
             break
 
 main()
+
+# def check_for_same_guess(guess, chosen_letters):
+#     if guess in chosen_letters:
+#         print("You've already chosen this letter.")
+#         return False
+#     else:
+#         chosen_letters.append(guess)
+#         return True
+
+# # Usage example
+# chosen_letters = []
+# while True:
+#     guess = input("Enter a letter: ")
+#     if check_for_same_guess(guess, chosen_letters):
+#         # Process the new guess
+#         break
+#     # If False is returned, the loop will continue, asking for a new guess

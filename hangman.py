@@ -13,38 +13,56 @@ import random
 with open("wordlist.json", "r") as file:
     word_list = json.load(file)
 
-chosen_letters = []
-word = random.choice(word_list)
-word_length = len(word)
-body_parts = 5
-display = ['*'] * word_length
 
-def check_for_same_guess(guess):
+
+def main():
+    # Instantiate Game Variables
+    chosen_letters = []
+    word = random.choice(word_list)
+    word_length = len(word)
+    body_parts = 5
+    display = ['*'] * word_length
+    attempts = 0
+    # main game loop
+
+    while True:
+        guess = get_guess()
+        while True:
+            guess = input("Enter a letter: ")
+            if check_for_same_guess(guess, chosen_letters):
+                # Process the new guess
+                break
+        is_correct(guess)
+        print_result(is_correct(guess))
+        update_body_parts(is_correct(guess))
+        display = update_display(guess, word, display)
+        print(" ".join(display))
+
+        # Check win condition
+        if "*" not in display:
+            print("You win!")
+            break
+
+        # Check lose condition
+        if body_parts >= attempts:
+            print ("You have lost the game, whomp whomp.")
+            print ("The correct word was: {word}")
+
+def check_for_same_guess(guess, chosen_letters):
     if guess in chosen_letters:
         print("You've already choosen this letter.")
-        new_guess = get_guess()
+        return False
     else:
         chosen_letters.append(guess)
         return True
-            
-def get_user_input(prompt):
-    # get user input
-    return input(prompt)
 
-def validate_input(user_input):
-    # validate user input
-    if len(user_input) == 1 and user_input.isalpha():
-        return user_input
-    raise ValueError("Invalid input. Please enter a single letter.")
-
-def get_guess():
+def get_guess(chosen_letters):
     while True:
-        try:
-            guess = validate_input(get_user_input("Guess a letter: "))
+        guess = input("Enter a letter: ").lower().strip()
+        if len(guess) == 1 and guess.isalpha():
             return guess
-        except ValueError as e:
-            print(e)
-
+        print("Invalid input. Please enter a single letter.")
+        
 def update_display(guess, word, display):
     # update display
     for i in range(len(word)):
@@ -72,36 +90,4 @@ def update_body_parts(is_correct):
         body_parts -= 1
         print (f"You have {body_parts} body parts left!")
 
-def main():
-    # main game loop
-    global display
-    while True:
-        guess = get_guess()
-        check_for_same_guess(guess)
-        is_correct(guess)
-        print_result(is_correct(guess))
-        update_body_parts(is_correct(guess))
-        display = update_display(guess, word, display)
-        print(" ".join(display))
-        if "*" not in display:
-            print("You win!")
-            break
-
 main()
-
-# def check_for_same_guess(guess, chosen_letters):
-#     if guess in chosen_letters:
-#         print("You've already chosen this letter.")
-#         return False
-#     else:
-#         chosen_letters.append(guess)
-#         return True
-
-# # Usage example
-# chosen_letters = []
-# while True:
-#     guess = input("Enter a letter: ")
-#     if check_for_same_guess(guess, chosen_letters):
-#         # Process the new guess
-#         break
-#     # If False is returned, the loop will continue, asking for a new guess

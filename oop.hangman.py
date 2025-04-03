@@ -35,6 +35,11 @@ class Hangman():
             if "*" not in self.display:
                 print("You win!")
                 break
+        
+        # Check lose condition
+        if self.body_parts >= self.attempts:
+            print ("You have lost the game, whomp whomp.")
+            print (f"The correct word was: {self.word}")
     
     def get_guess(self):
         while True:
@@ -53,7 +58,7 @@ class Hangman():
         return self.display
 
     def update_body_parts(self):
-        print(f"{self.body_parts} added")
+        print(f"{self.attempts} added")
 
 if __name__ == "__main__":
     with open("wordlist.json", "r") as file:

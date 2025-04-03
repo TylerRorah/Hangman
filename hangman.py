@@ -28,7 +28,7 @@ def main():
         guess = get_guess(chosen_letters)
 
         if guess in chosen_letters:
-            print(f"You've already guessed {guess} this letter")
+            print(f"You've already guessed {guess}")
             continue
 
         if is_correct(guess, word):
@@ -70,8 +70,8 @@ def update_display(guess, word, display):
 def is_correct(guess, word):
     return guess in word
 
-def update_body_parts(body_parts):
-    print(f"{body_parts} added")
+def update_body_parts(attempts):
+    print(f"{attempts} added")
 
 if __name__ == "__main__":
     main()
